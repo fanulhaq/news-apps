@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2021. ~ Irfanul Haq.
+  -->
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.webview.WebViewActivity">
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="@dimen/toolbar_default"
+        android:gravity="center_vertical">
+        <ImageView
+            android:id="@+id/imageBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="@dimen/pm_xxsmall"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_back"
+            android:background="@drawable/ripple_imageview"
+            android:layout_marginStart="@dimen/pm_small"/>
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_xlarge"
+            android:textColor="@color/textColorPrimary"
+            android:fontFamily="@font/notosans_semi_bold"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_marginStart="@dimen/pm_xsmall"
+            android:layout_marginEnd="@dimen/pm_medium"
+            android:text="@string/article" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/shadowLine"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pm_xxxsmall"
+        android:background="@drawable/shadown_effect"/>
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_below="@+id/shadowLine"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:scrollbars="none"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/green"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+</RelativeLayout>

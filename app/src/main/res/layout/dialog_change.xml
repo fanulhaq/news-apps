@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2021 - Muchi (Irfanul Haq).
+  -->
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/pm_small"
+        android:paddingBottom="@dimen/pm_medium">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="@dimen/font_large"
+            android:fontFamily="@font/notosans_semi_bold"
+            android:layout_marginStart="@dimen/pm_medium"
+            android:layout_marginEnd="@dimen/pm_medium"
+            android:text="@string/change_search" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/pm_xsmall"
+            android:background="@color/colorLine"/>
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/pm_xxsmall"
+            android:layout_marginStart="@dimen/pm_medium"
+            android:layout_marginEnd="@dimen/pm_medium"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/source"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/source"
+                android:fontFamily="@font/notosans_regular"
+                android:buttonTint="@drawable/radio_button_color"/>
+
+            <RadioButton
+                android:id="@+id/article"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="@string/article"
+                android:fontFamily="@font/notosans_regular"
+                android:buttonTint="@drawable/radio_button_color" />
+        </RadioGroup>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/pm_medium"
+            android:layout_marginEnd="@dimen/pm_medium"
+            android:layout_gravity="end">
+            <TextView
+                android:id="@+id/tvCancel"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_medium"
+                android:textColor="@color/rippleDefault"
+                android:fontFamily="@font/notosans_medium"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingTop="@dimen/pm_xxsmall"
+                android:paddingBottom="@dimen/pm_xxsmall"
+                android:background="@drawable/ripple_textview_cancel"
+                android:textAlignment="center"
+                android:text="@string/cancel" />
+
+            <TextView
+                android:id="@+id/tvYes"
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_medium"
+                android:textColor="@color/green"
+                android:fontFamily="@font/notosans_medium"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/ripple_textview_yes"
+                android:textAlignment="center"
+                android:paddingTop="@dimen/pm_xxsmall"
+                android:paddingBottom="@dimen/pm_xxsmall"
+                android:layout_marginStart="@dimen/pm_small"
+                android:text="Yes" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">News</string>
+
+    <string name="internet_offline">Hmm.. Ga ada Internet nih</string>
+    <string name="msg_internet_offline">Coba cek lagi koneksi kamu</string>
+    <string name="warning">Oops.. Sepertinya ada masalah</string>
+    <string name="search_news_sources">Search News Sources</string>
+    <string name="search_news_articles">Search News Articles</string>
+    <string name="change">Change</string>
+    <string name="article">Article</string>
+    <string name="source">Source</string>
+    <string name="cancel">Cancel</string>
+    <string name="change_search">Change Search</string>
+</resources>
