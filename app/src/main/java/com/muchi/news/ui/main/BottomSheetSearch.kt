@@ -13,12 +13,12 @@ import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
 import android.view.View
-import android.view.inputmethod.EditorInfo.*
+import android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager.*
+import androidx.recyclerview.widget.LinearLayoutManager.VERTICAL
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -158,7 +158,9 @@ class BottomSheetSearch: BottomSheetDialogFragment(), ItemClickArticle, ItemClic
                     }
                 }
                 is State.Error -> {
-                    if(state.code != 69)
+                    if(state.code == -1)
+                        context?.bottomSheetNoInternet(layoutInflater, 0)
+                    else
                         context?.bottomSheetError(layoutInflater, handlerErrorResponse(state.code))
                 }
             }
@@ -183,14 +185,16 @@ class BottomSheetSearch: BottomSheetDialogFragment(), ItemClickArticle, ItemClic
                 is State.Error -> {
                     progressBar.gone()
 
-                    if(state.code != 69)
+                    if(state.code == -1)
+                        context?.bottomSheetNoInternet(layoutInflater, 0)
+                    else
                         context?.bottomSheetError(layoutInflater, handlerErrorResponse(state.code))
                 }
             }
         }
 
         if (mainVM.allSources.value !is State.Success)
-            mainVM.allSources()
+            context?.let { mainVM.allSources(it) }
     }
 
     private fun searchSource(text: String){
@@ -232,10 +236,7 @@ class BottomSheetSearch: BottomSheetDialogFragment(), ItemClickArticle, ItemClic
                     searchSource(text.toString())
                 }
                 1 -> {
-                    if(context?.isNetworkAvailable() == true)
-                        mainVM.searchArticle(text.toString())
-                    else
-                        context?.bottomSheetNoInternet(layoutInflater)?.show()
+                    context?.let { mainVM.searchArticle(it, text.toString()) }
                 }
             }
         } else {
@@ -254,10 +255,7 @@ class BottomSheetSearch: BottomSheetDialogFragment(), ItemClickArticle, ItemClic
                         searchSource(etSearch.text.toString())
                     }
                     1 -> {
-                        if(context?.isNetworkAvailable() == true)
-                            mainVM.searchArticle(etSearch.text.toString())
-                        else
-                            context?.bottomSheetNoInternet(layoutInflater)?.show()
+                        context?.let { mainVM.searchArticle(it, etSearch.text.toString()) }
                     }
                 }
             }

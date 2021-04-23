@@ -28,6 +28,7 @@ import com.muchi.news.ui.adapter.ArticleAdapter
 import com.muchi.news.ui.adapter.ItemClickArticle
 import com.muchi.news.ui.base.BaseActivity
 import com.muchi.news.ui.dialog.bottomSheetError
+import com.muchi.news.ui.dialog.bottomSheetNoInternet
 import com.muchi.news.ui.webview.WebViewActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -114,14 +115,16 @@ class ArticleActivity : BaseActivity(), ItemClickArticle {
                 is State.Error -> {
                     progressBar.gone()
 
-                    if(state.code != 69)
+                    if(state.code == -1)
+                        bottomSheetNoInternet(layoutInflater, 0)
+                    else
                         bottomSheetError(layoutInflater, handlerErrorResponse(state.code))
                 }
             }
         }
 
         if (articleVM.article.value !is State.Success)
-            source?.let { articleVM.article(it) }
+            source?.let { articleVM.article(this, it) }
     }
 
     @OnClick(value = [R2.id.imageBack])

@@ -4,11 +4,12 @@
 
 package com.muchi.news.data.remote
 
-import com.muchi.news.data.remote.ServiceGenerator.API_KEY
+import com.muchi.news.BuildConfig.API_KEY
 import com.muchi.news.data.remote.response.ArticleResponse
 import com.muchi.news.data.remote.response.SourceResponse
 import retrofit2.Response
-import retrofit2.http.*
+import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface ApiService {
     @GET("sources")

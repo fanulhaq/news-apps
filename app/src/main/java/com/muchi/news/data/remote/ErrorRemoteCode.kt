@@ -20,11 +20,11 @@ fun handlerErrorResponse(code: Int): String {
         411 ->  "Length Required (411)"
         412 ->  "Precondition Failed (412)"
         413 ->  "Payload Too Large (413)"
-        414 ->  "UriTooLong (414)"
+        414 ->  "Uri Too Long (414)"
         415 ->  "Unsupported MediaType (415)"
         416 ->  "Range Not Satisfiable (416)"
         417 ->  "Expectation Failed (417)"
-        418 ->  "ImATeapot (418)"
+        418 ->  "I'm A Teapot (418)"
         421 ->  "Misdirected Request (421)"
         422 ->  "Unprocessable Entity (422)"
         423 ->  "Locked (423)"
@@ -48,6 +48,7 @@ fun handlerErrorResponse(code: Int): String {
         511 ->  "Network Authentication Required (511)"
 
         69 ->  "Can't Parse Data Response"
+        -1 ->  "No Internet"
         else -> "Unknown Error"
     }
 }

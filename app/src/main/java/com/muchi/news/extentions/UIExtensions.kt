@@ -2,6 +2,8 @@
  * Copyright (c) 2020 - Irfanul Haq.
  */
 
+@file:Suppress("DEPRECATION")
+
 package com.muchi.news.extentions
 
 import android.app.Activity
@@ -21,7 +23,6 @@ import androidx.core.graphics.drawable.DrawableCompat
 import com.muchi.news.R
 import com.muchi.news.utils.BounceInterpolator
 
-// Start Animation
 fun View.didTapButton() {
     val myAnim: Animation = loadAnimation(context, R.anim.bounce)
     val interpolator = BounceInterpolator(0.12, 12.0)
@@ -34,14 +35,27 @@ fun View.animSlideUp() {
     this.startAnimation(anim)
 }
 
+fun View.animSlideDown() {
+    val anim = loadAnimation(context, R.anim.slide_down)
+    this.startAnimation(anim)
+}
+
 fun View.animFadeIn() {
     val anim = loadAnimation(context, R.anim.fade_in)
     this.startAnimation(anim)
 }
-// End Animation
+
+fun View.animFadeOut() {
+    val anim = loadAnimation(context, R.anim.fade_out)
+    this.startAnimation(anim)
+}
 
 fun View.visible() {
     this.visibility = VISIBLE
+}
+
+fun View.invisible() {
+    this.visibility = INVISIBLE
 }
 
 fun View.gone() {
@@ -53,7 +67,6 @@ fun View.changeBackgroundDrawableColor(color: String?) {
     DrawableCompat.setTint(backgroundDrawable, Color.parseColor("$color"))
 }
 
-@Suppress("DEPRECATION")
 fun View.createDrawableFromView(context: Context): Bitmap {
     val displayMetrics = DisplayMetrics()
     (context as Activity).windowManager.defaultDisplay
@@ -73,7 +86,6 @@ fun View.createDrawableFromView(context: Context): Bitmap {
     return bitmap
 }
 
-@Suppress("DEPRECATION")
 fun Activity.hideKeyboard() {
     val view = this.currentFocus
     if(Build.VERSION.SDK_INT >= 26) {
@@ -89,4 +101,9 @@ fun Activity.hideKeyboard() {
             imm.hideSoftInputFromInputMethod(view.windowToken, 0)
         }
     }
+}
+
+fun Activity.showKeyboard(){
+    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
 }

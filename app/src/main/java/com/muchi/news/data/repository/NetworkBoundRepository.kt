@@ -64,7 +64,6 @@ abstract class NetworkRequestRepository<RESULT, REQUEST>  {
     var request: REQUEST? = null
 
     fun asFlow() = flow<State<RESULT>> {
-
         emit(State.loading())
 
         val apiResponse = fetchFromRemote()
@@ -81,7 +80,6 @@ abstract class NetworkRequestRepository<RESULT, REQUEST>  {
                 State.success(it)
             }
         )
-
     }.catch { e ->
         emit(State.error(e.message.toString(), 69))
         e.printStackTrace()

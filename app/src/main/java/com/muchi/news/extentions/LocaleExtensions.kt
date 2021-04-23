@@ -7,6 +7,8 @@
     "RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATION"
 )
 
+@file:SuppressLint("SimpleDateFormat")
+
 package com.muchi.news.extentions
 
 import android.annotation.SuppressLint
@@ -15,6 +17,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Environment
 import android.util.Base64
 import android.util.Log
@@ -41,14 +44,16 @@ fun Context?.isNetworkAvailable(): Boolean {
 }
 
 fun Context?.isValidContextForGlide(): Boolean {
-    if (this == null) {
+    if(this == null) {
         return false
     }
-    if (this is Activity) {
-        if (this.isDestroyed || this.isFinishing) {
+
+    if(this is Activity) {
+        if(this.isDestroyed || this.isFinishing) {
             return false
         }
     }
+
     return true
 }
 
@@ -66,45 +71,46 @@ fun showLog(tag: String, string: String){
 
 /* Start Directory */
 fun Context.imageDirectory(): File {
-    val dir = File(
-        Environment.getExternalStorageDirectory(),
-        "${this.resources.getString(R.string.app_name)}/Images"
-    )
-
-    if (!dir.exists()) {
-        dir.mkdirs()
+    return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+        File("${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
+                "${File.separator}${this.resources.getString(R.string.app_name)}${File.separator}Images")
+    } else {
+        File(Environment.getExternalStorageDirectory().absolutePath +
+                "${File.separator}${this.resources.getString(R.string.app_name)}${File.separator}Images")
     }
-
-    return dir
 }
 
 fun Context.documentsDirectory(): String? {
-    val sdCardRoot = File(
-        Environment.getExternalStorageDirectory(),
-        "${this.resources.getString(R.string.app_name)}/Documents"
-    )
-
-    if (!sdCardRoot.exists()) {
-        sdCardRoot.mkdirs()
+    return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+        "${Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)}" +
+                "${File.separator}${this.resources.getString(R.string.app_name)}${File.separator}Documents"
+    } else { Environment.getExternalStorageDirectory().absolutePath +
+                "${File.separator}${this.resources.getString(R.string.app_name)}${File.separator}Documents"
     }
-
-    return sdCardRoot.absolutePath
 }
 /* End Directory */
 
 /* Start Base64 */
 fun String.imageToBase64() : String {
-    val bm = BitmapFactory.decodeFile(this)
-    val baos = ByteArrayOutputStream()
-    bm.compress(Bitmap.CompressFormat.JPEG, 25, baos)
+    return try {
+        val bm = BitmapFactory.decodeFile(this)
+        val baos = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.JPEG, 20, baos)
 
-    val b: ByteArray = baos.toByteArray()
-    return Base64.encodeToString(b, Base64.DEFAULT)
+        val b: ByteArray = baos.toByteArray()
+        Base64.encodeToString(b, Base64.DEFAULT)
+    } catch (e: NullPointerException){
+        e.printStackTrace()
+        ""
+    } catch (e: RuntimeException){
+        e.printStackTrace()
+        ""
+    }
 }
 
 fun Bitmap.bitmapToBase64() : String {
     val baos = ByteArrayOutputStream()
-    this.compress(Bitmap.CompressFormat.JPEG, 25, baos)
+    this.compress(Bitmap.CompressFormat.JPEG, 20, baos)
 
     val b: ByteArray = baos.toByteArray()
     return Base64.encodeToString(b, Base64.DEFAULT)
@@ -117,8 +123,7 @@ fun String.base64ToBitmap() : Bitmap {
 /* End Base64 */
 
 /* Start Date Time */
-@SuppressLint("SimpleDateFormat")
-fun String.dateSqlDDMMMYYYY() : String? {
+fun String.dateSqlToDdMmmYyyy() : String? {
     var date: Date? = null
     val formatter: DateFormat = SimpleDateFormat("yyyy-MM-dd")
     val returnFormatter = SimpleDateFormat("dd MMM yyyy")
@@ -132,11 +137,10 @@ fun String.dateSqlDDMMMYYYY() : String? {
     return returnFormatter.format(date)
 }
 
-@SuppressLint("SimpleDateFormat")
-fun String.dateSqlDdMmmYy() : String? {
+fun String.dateSqlToFullDate() : String? {
     var date: Date? = null
     val formatter: DateFormat = SimpleDateFormat("yyyy-MM-dd")
-    val returnFormatter = SimpleDateFormat("dd MMM yy")
+    val returnFormatter = SimpleDateFormat("dd MMMM yyyy")
 
     try {
         date = formatter.parse(this)
@@ -147,7 +151,6 @@ fun String.dateSqlDdMmmYy() : String? {
     return returnFormatter.format(date)
 }
 
-@SuppressLint("SimpleDateFormat")
 fun String.timesNewsToDateTime() : String? {
     val data = this.replace("T", " ").replace("Z", "")
 

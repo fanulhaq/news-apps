@@ -6,6 +6,7 @@
 
 package com.muchi.news.ui.main
 
+import android.content.Context
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,6 +15,7 @@ import com.muchi.news.data.local.entity.ArticleEntity
 import com.muchi.news.data.local.entity.SourceEntity
 import com.muchi.news.data.repository.MainRepository
 import com.muchi.news.extentions.State
+import com.muchi.news.extentions.isNetworkAvailable
 import com.muchi.news.ui.adapter.CategoryModel
 import com.muchi.news.ui.base.BaseViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -54,33 +56,45 @@ class MainViewModel  @ViewModelInject constructor(
     val sources: LiveData<State<List<SourceEntity>>>
         get() = _sources
 
-    fun sources(value: String){
-        viewModelScope.launch {
-            mainRepository.getSources(value).collect {
-                _sources.postValue(it)
+    fun sources(context: Context, value: String){
+        if(context.isNetworkAvailable()){
+            viewModelScope.launch {
+                mainRepository.getSources(value).collect {
+                    _sources.postValue(it)
+                }
             }
+        } else {
+            _sources.postValue(State.error("No Internet", -1))
         }
     }
 
     val allSources: LiveData<State<List<SourceEntity>>>
         get() = _allSources
 
-    fun allSources(){
-        viewModelScope.launch {
-            mainRepository.getAllSources().collect {
-                _allSources.postValue(it)
+    fun allSources(context: Context){
+        if(context.isNetworkAvailable()){
+            viewModelScope.launch {
+                mainRepository.getAllSources().collect {
+                    _allSources.postValue(it)
+                }
             }
+        } else {
+            _allSources.postValue(State.error("No Internet", -1))
         }
     }
 
     val searchArticle: LiveData<State<List<ArticleEntity>>>
         get() = _searchArticle
 
-    fun searchArticle(value: String){
-        viewModelScope.launch {
-            mainRepository.getSearchArticles(value).collect {
-                _searchArticle.postValue(it)
+    fun searchArticle(context: Context, value: String){
+        if(context.isNetworkAvailable()){
+            viewModelScope.launch {
+                mainRepository.getSearchArticles(value).collect {
+                    _searchArticle.postValue(it)
+                }
             }
+        } else {
+            _searchArticle.postValue(State.error("No Internet", -1))
         }
     }
 }

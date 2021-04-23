@@ -63,7 +63,7 @@ class WebViewActivity : BaseActivity() {
             if(isNetworkAvailable())
                 webView.loadUrl("${bundle.getString(URL)}")
             else
-                bottomSheetNoInternet(layoutInflater).show()
+                bottomSheetNoInternet(layoutInflater, 0).show()
         }
     }
 

@@ -14,9 +14,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.muchi.news.R
+import com.muchi.news.extentions.gone
 
 
-fun Context.bottomSheetNoInternet(layoutInflater: LayoutInflater): BottomSheetDialog {
+fun Context.bottomSheetNoInternet(layoutInflater: LayoutInflater, type: Int): BottomSheetDialog {
     val view = layoutInflater.inflate(R.layout.bs_no_internet, null)
     val bsDialog = BottomSheetDialog(this)
     bsDialog.setContentView(view)
@@ -24,6 +25,11 @@ fun Context.bottomSheetNoInternet(layoutInflater: LayoutInflater): BottomSheetDi
     val imageBack: ImageView = view.findViewById(R.id.imageBack)
     imageBack.setOnClickListener {
         bsDialog.dismiss()
+    }
+
+    if(type == 1) {
+        imageBack.gone()
+        bsDialog.setCancelable(false)
     }
 
     return bsDialog

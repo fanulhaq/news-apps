@@ -139,7 +139,7 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
 
 
         if (mainVM.sources.value !is State.Success)
-            mainVM.sources(category)
+            mainVM.sources(this, category)
 
         handleNetworkChanges()
     }
@@ -157,7 +157,7 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
             selectedData?.let { mainVM.itemCategory(it) }
             linearLayoutManager?.scrollToPositionWithOffset(position, 30)
 
-            mainVM.sources(category)
+            mainVM.sources(this, category)
         }
     }
 
@@ -194,7 +194,7 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
     }
 
     private fun handleNetworkChanges() {
-        val dialog = bottomSheetNoInternet(layoutInflater)
+        val dialog = bottomSheetNoInternet(layoutInflater, 1)
         NetworkUtils.getNetworkLiveData(this).observe(this) { isConnected ->
             if (!isConnected) {
                 if(!dialog.isShowing) dialog.show()
@@ -202,7 +202,7 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
                 dialog.dismiss()
 
                 if(mainVM.sources.value is State.Error || sourceAdapter.itemCount == 0)
-                    mainVM.sources(category)
+                    mainVM.sources(this, category)
             }
         }
     }
