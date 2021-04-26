@@ -33,4 +33,11 @@ object Dependencies {
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
     const val lottie = "com.airbnb.android:lottie:${Versions.lottie}"
     const val play_service_location = "com.google.android.gms:play-services-location:${Versions.play_service_location}"
+    const val firebase_bom = "com.google.firebase:firebase-bom:${Versions.firebase_bom}"
+    const val firebase_core = "com.google.firebase:firebase-core:${Versions.firebase_core}"
+    const val firebase_auth = "com.google.firebase:firebase-auth:${Versions.firebase_auth}"
+    const val play_service_auth = "com.google.android.gms:play-services-auth:${Versions.play_service_auth}"
+    const val firebase_analytics_ktx = "com.google.firebase:firebase-analytics-ktx"
+    const val firebase_crashlytics_ktx = "com.google.firebase:firebase-crashlytics-ktx"
+    const val firebase_messaging_ktx = "com.google.firebase:firebase-messaging-ktx"
 }

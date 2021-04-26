@@ -10,6 +10,9 @@ object Versions {
     const val kotlin = "1.4.30"
     const val butterknife = "10.2.3"
     const val dagger_hilt_plugin = "2.31.2-alpha"
+    const val ktlint = "9.2.1"
+    const val crashlytics = "2.5.2"
+    const val google_services = "4.3.5"
 
     // Support Dependencies
     const val appcompat = "1.2.0"
@@ -40,6 +43,10 @@ object Versions {
     const val image_picker = "1.7.1"
     const val gson = "2.8.6"
     const val play_service_location = "18.0.0"
+    const val firebase_bom = "26.3.0"
+    const val firebase_core = "18.0.3"
+    const val firebase_auth = "20.0.4"
+    const val play_service_auth = "19.0.0"
 
     // Test
     const val test_junit = "1.1.2"
