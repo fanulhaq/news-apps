@@ -17,7 +17,10 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
 import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.signature.ObjectKey
 import com.muchi.news.R
 import com.muchi.news.R2
 import com.muchi.news.data.local.entity.ArticleEntity
@@ -30,6 +33,14 @@ class ArticleAdapter: RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
     private var data: List<ArticleEntity> = ArrayList()
     private var unbinder: Unbinder? = null
     private lateinit var listener: ItemClickArticle
+
+    private val options: RequestOptions = RequestOptions()
+        //.diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+        .signature(ObjectKey(System.currentTimeMillis()))
+        .priority(Priority.NORMAL)
+        .encodeQuality(25)
+        .placeholder(R.drawable.no_image)
+        .error(R.drawable.no_image)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -47,12 +58,12 @@ class ArticleAdapter: RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
         holder.tvAuthor.text = if(currentData.author.isNullOrEmpty() || currentData.author == "null") "Anonymous"
                                 else currentData.author
 
-        val options: RequestOptions = RequestOptions()
-            .placeholder(R.drawable.no_image)
-            .error(R.drawable.no_image)
-
-        if(holder.itemView.context.isValidContextForGlide())
-            Glide.with(holder.itemView.context).load(currentData.urlToImage).apply(options).into(holder.imageView)
+        if(holder.itemView.context.isValidContextForGlide()) {
+            Glide.with(holder.itemView.context)
+                .load(currentData.urlToImage)
+                .apply(options)
+                .into(holder.imageView)
+        }
 
         when(position){
             0 -> {

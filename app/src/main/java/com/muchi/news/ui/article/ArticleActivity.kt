@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager.*
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.OnClick
+import com.bumptech.glide.Glide
 import com.muchi.news.R
 import com.muchi.news.R2
 import com.muchi.news.data.local.entity.ArticleEntity
@@ -75,6 +76,16 @@ class ArticleActivity : BaseActivity(), ItemClickArticle {
 
         initView()
         initViewModel()
+
+        // Buat jadwal untuk membersihkan cache glide
+//        Thread {
+//            Glide.get(this).clearDiskCache()
+//        }.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Glide.get(this).clearMemory()
     }
 
     private fun initView(){
