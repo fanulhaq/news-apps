@@ -14,7 +14,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.muchi.news.R
-import com.muchi.news.extentions.gone
+import com.muchi.news.utils.gone
 
 
 fun Context.bottomSheetNoInternet(layoutInflater: LayoutInflater, type: Int): BottomSheetDialog {
@@ -36,7 +36,7 @@ fun Context.bottomSheetNoInternet(layoutInflater: LayoutInflater, type: Int): Bo
 }
 
 
-fun Context.bottomSheetError(layoutInflater: LayoutInflater, msg: String){
+fun Context.bottomSheetError(layoutInflater: LayoutInflater, msg: String) {
     val view = layoutInflater.inflate(R.layout.bs_error, null)
     val bsDialog = BottomSheetDialog(this)
     bsDialog.setContentView(view)

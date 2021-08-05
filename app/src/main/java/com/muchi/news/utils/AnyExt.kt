@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 - Irfanul Haq.
+ * Copyright (c) 2021. ~ Irfanul Haq.
  */
 
 @file:Suppress(
@@ -9,7 +9,7 @@
 
 @file:SuppressLint("SimpleDateFormat")
 
-package com.muchi.news.extentions
+package com.muchi.news.utils
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -23,6 +23,8 @@ import android.util.Base64
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.muchi.news.R
@@ -32,12 +34,13 @@ import java.text.*
 import java.util.*
 
 
-fun Context?.toastShort(string: String){
-    Toast.makeText(this, string, Toast.LENGTH_SHORT).show()
-}
-
-fun Context?.toastLong(string: String){
-    Toast.makeText(this, string, Toast.LENGTH_LONG).show()
+fun Context?.showToast(lifecycleOwner: LifecycleOwner, Event: LiveData<SingleEvent<Any>>, timeLength: Int) {
+    Event.observe(lifecycleOwner, SingleEventObserver {
+        when (it) {
+            is String -> Toast.makeText(this, it, timeLength).show()
+            is Int -> Toast.makeText(this, this?.getString(it), timeLength).show()
+        }
+    })
 }
 
 fun logTest(string: String){

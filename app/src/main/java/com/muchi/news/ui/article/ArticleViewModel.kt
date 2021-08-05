@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.muchi.news.data.local.entity.ArticleEntity
 import com.muchi.news.data.repository.ArticleRepository
-import com.muchi.news.extentions.State
+import com.muchi.news.utils.State
 import com.muchi.news.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

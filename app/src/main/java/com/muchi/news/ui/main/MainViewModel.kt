@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.muchi.news.data.local.entity.ArticleEntity
 import com.muchi.news.data.local.entity.SourceEntity
 import com.muchi.news.data.repository.MainRepository
-import com.muchi.news.extentions.State
+import com.muchi.news.utils.State
 import com.muchi.news.ui.adapter.CategoryModel
 import com.muchi.news.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

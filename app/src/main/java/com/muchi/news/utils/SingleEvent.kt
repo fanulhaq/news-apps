@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2020 - Irfanul Haq.
+ * Copyright (c) 2021. ~ Irfanul Haq.
  */
 
-package com.muchi.news.extentions
+package com.muchi.news.utils
 
 import androidx.lifecycle.Observer
 
-open class Event<out T>(private val event: T) {
+open class SingleEvent<out T>(private val event: T) {
 
     var hasBeenHandled = false
         private set // Allow external read but not write
@@ -29,8 +29,8 @@ open class Event<out T>(private val event: T) {
     fun peekEvent(): T = event
 }
 
-class EventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<Event<T>> {
-    override fun onChanged(event: Event<T>?) {
+class SingleEventObserver<T>(private val onEventUnhandledContent: (T) -> Unit) : Observer<SingleEvent<T>> {
+    override fun onChanged(event: SingleEvent<T>?) {
         event?.getEventIfNotHandled()?.let { value ->
             onEventUnhandledContent(value)
         }

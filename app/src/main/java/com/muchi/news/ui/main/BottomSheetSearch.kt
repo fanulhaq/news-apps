@@ -29,7 +29,6 @@ import com.muchi.news.R2
 import com.muchi.news.data.local.entity.ArticleEntity
 import com.muchi.news.data.local.entity.SourceEntity
 import com.muchi.news.data.remote.handlerErrorResponse
-import com.muchi.news.extentions.*
 import com.muchi.news.prefs.DataPreference.getSearch
 import com.muchi.news.prefs.DataPreference.setSearch
 import com.muchi.news.ui.adapter.ArticleAdapter
@@ -42,6 +41,7 @@ import com.muchi.news.ui.article.ArticleActivity.Companion.SOURCE_NAME
 import com.muchi.news.ui.article.ArticleActivity.Companion.URL
 import com.muchi.news.ui.dialog.bottomSheetError
 import com.muchi.news.ui.webview.WebViewActivity
+import com.muchi.news.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
@@ -133,7 +133,7 @@ class BottomSheetSearch: BottomSheetDialogFragment(), ItemClickArticle, ItemClic
     }
 
     private fun initViewModel(){
-        mainVM.navEvent.observe(this, EventObserver {
+        mainVM.singleEvent.observe(this, SingleEventObserver {
             startActivity(Intent(context, it.first.java).apply {
                 if(it.second != null)
                     this.putExtras(it.second!!)
@@ -189,13 +189,15 @@ class BottomSheetSearch: BottomSheetDialogFragment(), ItemClickArticle, ItemClic
             }
         }
 
+        context.showToast(this, mainVM.showToast, Toast.LENGTH_SHORT)
+
         if (mainVM.allSources.value !is State.Success)
             mainVM.allSources()
     }
 
     private fun searchSource(text: String){
-        if(dataSource.isNullOrEmpty()){
-            context.toastShort("Data sources is not ready")
+        if(dataSource.isNullOrEmpty()) {
+            mainVM.showToast("Data sources is not ready")
         } else {
             val temp: MutableList<SourceEntity> = ArrayList()
             for (d in dataSource) {
@@ -297,13 +299,13 @@ class BottomSheetSearch: BottomSheetDialogFragment(), ItemClickArticle, ItemClic
     override fun itemClickArticle(view: View?, position: Int, data: ArticleEntity) {
         val bundle = Bundle()
         bundle.putString(URL, data.url)
-        mainVM.navEvent(Pair(WebViewActivity::class, bundle))
+        mainVM.singleEvent(Pair(WebViewActivity::class, bundle))
     }
 
     override fun itemClickSource(view: View?, position: Int, data: SourceEntity) {
         val bundle = Bundle()
         bundle.putString(SOURCE_ID, data.id)
         bundle.putString(SOURCE_NAME, data.name)
-        mainVM.navEvent(Pair(ArticleActivity::class, bundle))
+        mainVM.singleEvent(Pair(ArticleActivity::class, bundle))
     }
 }

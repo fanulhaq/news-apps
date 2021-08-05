@@ -24,7 +24,6 @@ import com.muchi.news.R
 import com.muchi.news.R2
 import com.muchi.news.data.local.entity.SourceEntity
 import com.muchi.news.data.remote.handlerErrorResponse
-import com.muchi.news.extentions.*
 import com.muchi.news.prefs.DataPreference.getSearch
 import com.muchi.news.ui.adapter.*
 import com.muchi.news.ui.article.ArticleActivity
@@ -33,7 +32,7 @@ import com.muchi.news.ui.article.ArticleActivity.Companion.SOURCE_NAME
 import com.muchi.news.ui.base.BaseActivity
 import com.muchi.news.ui.dialog.bottomSheetError
 import com.muchi.news.ui.dialog.bottomSheetNoInternet
-import com.muchi.news.utils.NetworkUtils
+import com.muchi.news.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
@@ -128,7 +127,7 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
             }
         }
 
-        mainVM.navEvent.observe(this, EventObserver {
+        mainVM.singleEvent.observe(this, SingleEventObserver {
             startActivity(Intent(this, it.first.java).apply {
                 if(it.second != null)
                     this.putExtras(it.second!!)
@@ -136,7 +135,6 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
 
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         })
-
 
         if (mainVM.sources.value !is State.Success)
             mainVM.sources(category)
@@ -165,7 +163,7 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
         val bundle = Bundle()
         bundle.putString(SOURCE_ID, data.id)
         bundle.putString(SOURCE_NAME, data.name)
-        mainVM.navEvent(Pair(ArticleActivity::class, bundle))
+        mainVM.singleEvent(Pair(ArticleActivity::class, bundle))
     }
 
     @OnClick(value = [R2.id.cvSearch])

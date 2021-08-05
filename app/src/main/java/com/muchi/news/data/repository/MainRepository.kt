@@ -11,8 +11,8 @@ import com.muchi.news.data.local.entity.SourceEntity
 import com.muchi.news.data.remote.ApiService
 import com.muchi.news.data.remote.response.ArticleResponse
 import com.muchi.news.data.remote.response.SourceResponse
-import com.muchi.news.extentions.State
-import com.muchi.news.extentions.formatterDateOrTime
+import com.muchi.news.utils.State
+import com.muchi.news.utils.formatterDateOrTime
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow

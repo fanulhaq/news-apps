@@ -1,8 +1,8 @@
 /*
- * Copyright (c) 2020 - Irfanul Haq.
+ * Copyright (c) 2021. ~ Irfanul Haq.
  */
 
-package com.muchi.news.extentions
+package com.muchi.news.utils
 
 /**
  * State Management for UI & Data.

@@ -21,9 +21,9 @@ import butterknife.Unbinder
 import com.muchi.news.R
 import com.muchi.news.R2
 import com.muchi.news.data.local.entity.ArticleEntity
-import com.muchi.news.extentions.gone
-import com.muchi.news.extentions.loadImageForGlide
-import com.muchi.news.extentions.visible
+import com.muchi.news.utils.gone
+import com.muchi.news.utils.loadImageForGlide
+import com.muchi.news.utils.visible
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 

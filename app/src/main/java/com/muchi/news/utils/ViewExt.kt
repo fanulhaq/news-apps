@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2020 - Irfanul Haq.
+ * Copyright (c) 2021. ~ Irfanul Haq.
  */
 
 @file:Suppress("DEPRECATION")
 
-package com.muchi.news.extentions
+package com.muchi.news.utils
 
 import android.app.Activity
 import android.content.Context
@@ -21,7 +21,6 @@ import android.view.animation.AnimationUtils.*
 import android.view.inputmethod.InputMethodManager
 import androidx.core.graphics.drawable.DrawableCompat
 import com.muchi.news.R
-import com.muchi.news.utils.BounceInterpolator
 
 fun View.didTapButton() {
     val myAnim: Animation = loadAnimation(context, R.anim.bounce)

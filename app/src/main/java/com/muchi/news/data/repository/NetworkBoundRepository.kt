@@ -7,8 +7,8 @@ package com.muchi.news.data.repository
 import android.content.Context
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
-import com.muchi.news.extentions.State
-import com.muchi.news.extentions.isNetworkAvailable
+import com.muchi.news.utils.State
+import com.muchi.news.utils.isNetworkAvailable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import retrofit2.Response

@@ -24,13 +24,16 @@ import com.muchi.news.R
 import com.muchi.news.R2
 import com.muchi.news.data.local.entity.ArticleEntity
 import com.muchi.news.data.remote.handlerErrorResponse
-import com.muchi.news.extentions.*
 import com.muchi.news.ui.adapter.ArticleAdapter
 import com.muchi.news.ui.adapter.ItemClickArticle
 import com.muchi.news.ui.base.BaseActivity
 import com.muchi.news.ui.dialog.bottomSheetError
 import com.muchi.news.ui.dialog.bottomSheetNoInternet
 import com.muchi.news.ui.webview.WebViewActivity
+import com.muchi.news.utils.SingleEventObserver
+import com.muchi.news.utils.State
+import com.muchi.news.utils.gone
+import com.muchi.news.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Inject
@@ -94,7 +97,7 @@ class ArticleActivity : BaseActivity(), ItemClickArticle {
     }
 
     private fun initViewModel(){
-        articleVM.navEvent.observe(this, EventObserver {
+        articleVM.singleEvent.observe(this, SingleEventObserver {
             startActivity(Intent(this, it.first.java).apply {
                 if(it.second != null)
                     this.putExtras(it.second!!)
@@ -147,6 +150,6 @@ class ArticleActivity : BaseActivity(), ItemClickArticle {
     override fun itemClickArticle(view: View?, position: Int, data: ArticleEntity) {
         val bundle = Bundle()
         bundle.putString(URL, data.url)
-        articleVM.navEvent(Pair(WebViewActivity::class, bundle))
+        articleVM.singleEvent(Pair(WebViewActivity::class, bundle))
     }
 }

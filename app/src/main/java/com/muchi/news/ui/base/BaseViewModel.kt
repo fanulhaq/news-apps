@@ -8,17 +8,24 @@ import android.os.Bundle
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.muchi.news.extentions.Event
+import com.muchi.news.utils.SingleEvent
 import kotlin.reflect.KClass
 
 open class BaseViewModel : ViewModel() {
 
-    private var _navEvent = MutableLiveData<Event<Pair<KClass<*>, Bundle?>>>()
+    private var _singleEvent = MutableLiveData<SingleEvent<Pair<KClass<*>, Bundle?>>>()
+    private val _showToast = MutableLiveData<SingleEvent<Any>>()
 
-    val navEvent: LiveData<Event<Pair<KClass<*>, Bundle?>>>
-        get() = _navEvent
+    val singleEvent: LiveData<SingleEvent<Pair<KClass<*>, Bundle?>>>
+        get() = _singleEvent
 
-    fun navEvent(pair: Pair<KClass<*>, Bundle?>){
-        _navEvent.postValue(Event(pair))
+    fun singleEvent(pair: Pair<KClass<*>, Bundle?>){
+        _singleEvent.postValue(SingleEvent(pair))
+    }
+
+    val showToast: LiveData<SingleEvent<Any>> get() = _showToast
+
+    fun showToast(msg: Any){
+        _showToast.postValue(SingleEvent(msg))
     }
 }

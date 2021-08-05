@@ -18,9 +18,9 @@ import butterknife.BindView
 import butterknife.OnClick
 import com.muchi.news.R
 import com.muchi.news.R2
-import com.muchi.news.extentions.gone
-import com.muchi.news.extentions.isNetworkAvailable
-import com.muchi.news.extentions.visible
+import com.muchi.news.utils.gone
+import com.muchi.news.utils.isNetworkAvailable
+import com.muchi.news.utils.visible
 import com.muchi.news.ui.article.ArticleActivity.Companion.URL
 import com.muchi.news.ui.base.BaseActivity
 import com.muchi.news.ui.dialog.bottomSheetNoInternet
