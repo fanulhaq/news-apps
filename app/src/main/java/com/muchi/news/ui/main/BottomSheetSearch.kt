@@ -41,10 +41,10 @@ import com.muchi.news.ui.article.ArticleActivity.Companion.SOURCE_ID
 import com.muchi.news.ui.article.ArticleActivity.Companion.SOURCE_NAME
 import com.muchi.news.ui.article.ArticleActivity.Companion.URL
 import com.muchi.news.ui.dialog.bottomSheetError
-import com.muchi.news.ui.dialog.bottomSheetNoInternet
 import com.muchi.news.ui.webview.WebViewActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
 
 
 @ExperimentalCoroutinesApi
@@ -67,9 +67,9 @@ class BottomSheetSearch: BottomSheetDialogFragment(), ItemClickArticle, ItemClic
     lateinit var imageView: ImageView
 
     private val mainVM: MainViewModel by viewModels()
+    @Inject lateinit var articleAdapter: ArticleAdapter
+    @Inject lateinit var sourceAdapter: SourceAdapter
 
-    private var articleAdapter: ArticleAdapter = ArticleAdapter()
-    private var sourceAdapter: SourceAdapter = SourceAdapter()
     private var dataSource: ArrayList<SourceEntity> = ArrayList()
 
     companion object {
@@ -158,9 +158,7 @@ class BottomSheetSearch: BottomSheetDialogFragment(), ItemClickArticle, ItemClic
                     }
                 }
                 is State.Error -> {
-                    if(state.code == -1)
-                        context?.bottomSheetNoInternet(layoutInflater, 0)
-                    else
+                    if(state.code != -1)
                         context?.bottomSheetError(layoutInflater, handlerErrorResponse(state.code))
                 }
             }
@@ -185,16 +183,14 @@ class BottomSheetSearch: BottomSheetDialogFragment(), ItemClickArticle, ItemClic
                 is State.Error -> {
                     progressBar.gone()
 
-                    if(state.code == -1)
-                        context?.bottomSheetNoInternet(layoutInflater, 0)
-                    else
+                    if(state.code != -1)
                         context?.bottomSheetError(layoutInflater, handlerErrorResponse(state.code))
                 }
             }
         }
 
         if (mainVM.allSources.value !is State.Success)
-            context?.let { mainVM.allSources(it) }
+            mainVM.allSources()
     }
 
     private fun searchSource(text: String){
@@ -232,12 +228,8 @@ class BottomSheetSearch: BottomSheetDialogFragment(), ItemClickArticle, ItemClic
     fun searchItemData(text: CharSequence) {
         if(text.length >= 3){
             when(getSearch(context)){
-                0 -> {
-                    searchSource(text.toString())
-                }
-                1 -> {
-                    context?.let { mainVM.searchArticle(it, text.toString()) }
-                }
+                0 -> searchSource(text.toString())
+                1 -> mainVM.searchArticle(text.toString())
             }
         } else {
             imageView.gone()
@@ -251,12 +243,8 @@ class BottomSheetSearch: BottomSheetDialogFragment(), ItemClickArticle, ItemClic
         if(actionId == IME_ACTION_SEARCH){
             if(!etSearch.text.isNullOrEmpty()){
                 when(getSearch(context)){
-                    0 -> {
-                        searchSource(etSearch.text.toString())
-                    }
-                    1 -> {
-                        context?.let { mainVM.searchArticle(it, etSearch.text.toString()) }
-                    }
+                    0 -> searchSource(etSearch.text.toString())
+                    1 -> mainVM.searchArticle(etSearch.text.toString())
                 }
             }
         }

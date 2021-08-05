@@ -96,14 +96,12 @@ dependencies {
     implementation Dependencies.room_ktx
     implementation Dependencies.room_ktx
     implementation Dependencies.dagger_hilt
-    implementation Dependencies.hilt
     implementation Dependencies.butterknife
     implementation Dependencies.glide
 
     kapt AnnotationProcessing.room_compiler
     kapt AnnotationProcessing.dagger_hilt_compiler
     kapt AnnotationProcessing.moshi_codegen
-    kapt AnnotationProcessing.hilt_compailer
     kapt AnnotationProcessing.butterknife_compailer
     kapt AnnotationProcessing.glide_compailer
 

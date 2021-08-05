@@ -3,10 +3,12 @@
  */
 
 @file:SuppressLint("NonConstantResourceId")
+@file:Suppress("DEPRECATION", "DefaultLocale")
 
 package com.muchi.news.ui.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,8 +22,12 @@ import com.muchi.news.R2
 import com.muchi.news.data.local.entity.SourceEntity
 import com.muchi.news.extentions.gone
 import com.muchi.news.extentions.visible
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
-class SourceAdapter: RecyclerView.Adapter<SourceAdapter.ViewHolder>() {
+class SourceAdapter @Inject constructor(
+    @ActivityContext private val context: Context
+) : RecyclerView.Adapter<SourceAdapter.ViewHolder>() {
 
     private var data: List<SourceEntity> = ArrayList()
     private var unbinder: Unbinder? = null
@@ -33,8 +39,6 @@ class SourceAdapter: RecyclerView.Adapter<SourceAdapter.ViewHolder>() {
         return ViewHolder(itemView)
     }
 
-    @SuppressLint("DefaultLocale")
-    @Suppress("DEPRECATION")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentData = data[position]
 

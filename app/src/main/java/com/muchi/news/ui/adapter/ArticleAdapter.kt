@@ -3,10 +3,12 @@
  */
 
 @file:SuppressLint("NonConstantResourceId")
+@file:Suppress("DEPRECATION")
 
 package com.muchi.news.ui.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,31 +18,22 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.Unbinder
-import com.bumptech.glide.Glide
-import com.bumptech.glide.Priority
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.signature.ObjectKey
 import com.muchi.news.R
 import com.muchi.news.R2
 import com.muchi.news.data.local.entity.ArticleEntity
 import com.muchi.news.extentions.gone
-import com.muchi.news.extentions.isValidContextForGlide
+import com.muchi.news.extentions.loadImageForGlide
 import com.muchi.news.extentions.visible
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
-class ArticleAdapter: RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
+class ArticleAdapter @Inject constructor(
+    @ActivityContext private val context: Context
+) : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
 
     private var data: List<ArticleEntity> = ArrayList()
     private var unbinder: Unbinder? = null
     private lateinit var listener: ItemClickArticle
-
-    private val options: RequestOptions = RequestOptions()
-        //.diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-        .signature(ObjectKey(System.currentTimeMillis()))
-        .priority(Priority.NORMAL)
-        .encodeQuality(25)
-        .placeholder(R.drawable.no_image)
-        .error(R.drawable.no_image)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = LayoutInflater.from(parent.context)
@@ -58,12 +51,7 @@ class ArticleAdapter: RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
         holder.tvAuthor.text = if(currentData.author.isNullOrEmpty() || currentData.author == "null") "Anonymous"
                                 else currentData.author
 
-        if(holder.itemView.context.isValidContextForGlide()) {
-            Glide.with(holder.itemView.context)
-                .load(currentData.urlToImage)
-                .apply(options)
-                .into(holder.imageView)
-        }
+        currentData.urlToImage?.let { url -> context.loadImageForGlide(holder.imageView, url) }
 
         when(position){
             0 -> {

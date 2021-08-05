@@ -21,7 +21,10 @@ import android.os.Build
 import android.os.Environment
 import android.util.Base64
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.muchi.news.R
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -37,36 +40,50 @@ fun Context?.toastLong(string: String){
     Toast.makeText(this, string, Toast.LENGTH_LONG).show()
 }
 
-fun Context?.isNetworkAvailable(): Boolean {
-    val connectivityManager = this?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-    val activeNetworkInfo = connectivityManager?.activeNetworkInfo
-    return activeNetworkInfo != null && activeNetworkInfo.isConnected
-}
-
-fun Context?.isValidContextForGlide(): Boolean {
-    if(this == null) {
-        return false
-    }
-
-    if(this is Activity) {
-        if(this.isDestroyed || this.isFinishing) {
-            return false
-        }
-    }
-
-    return true
-}
-
-fun String.toCurrency() : String? {
-    return NumberFormat.getNumberInstance(Locale.getDefault()).format(this.toLong())
-}
-
 fun logTest(string: String){
     Log.d("TEST", string)
 }
 
 fun showLog(tag: String, string: String){
     Log.d(tag, string)
+}
+
+fun Context?.isNetworkAvailable(): Boolean {
+    val connectivityManager = this?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val activeNetworkInfo = connectivityManager.activeNetworkInfo
+    return activeNetworkInfo != null && activeNetworkInfo.isConnected
+}
+
+fun Context?.loadImageForGlide(imageView: ImageView, url: String) {
+
+    val isLoad = if(this == null) {
+         false
+    } else {
+        if(this is Activity)
+            !(this.isDestroyed || this.isFinishing)
+        else
+            true
+    }
+
+    if(isLoad) {
+        val options: RequestOptions = RequestOptions()
+            //.signature(ObjectKey(System.currentTimeMillis()))
+            //.priority(Priority.NORMAL)
+            //.encodeQuality(25)
+            .placeholder(R.drawable.no_image)
+            .error(R.drawable.no_image)
+
+        this?.let {
+            Glide.with(it)
+                .load(url)
+                .apply(options)
+                .into(imageView)
+        }
+    }
+}
+
+fun String.toCurrency() : String? {
+    return NumberFormat.getNumberInstance(Locale.getDefault()).format(this.toLong())
 }
 
 /* Start Directory */
@@ -123,10 +140,10 @@ fun String.base64ToBitmap() : Bitmap {
 /* End Base64 */
 
 /* Start Date Time */
-fun String.dateSqlToDdMmmYyyy() : String? {
+fun String.formatterDateOrTime(oldFormat: String, newFormat: String) : String? {
     var date: Date? = null
-    val formatter: DateFormat = SimpleDateFormat("yyyy-MM-dd")
-    val returnFormatter = SimpleDateFormat("dd MMM yyyy")
+    val formatter: DateFormat = SimpleDateFormat(oldFormat)
+    val returnFormatter = SimpleDateFormat(newFormat)
 
     try {
         date = formatter.parse(this)
@@ -137,45 +154,7 @@ fun String.dateSqlToDdMmmYyyy() : String? {
     return returnFormatter.format(date)
 }
 
-fun String.dateSqlToFullDate() : String? {
-    var date: Date? = null
-    val formatter: DateFormat = SimpleDateFormat("yyyy-MM-dd")
-    val returnFormatter = SimpleDateFormat("dd MMMM yyyy")
-
-    try {
-        date = formatter.parse(this)
-    } catch (e: ParseException) {
-        e.printStackTrace()
-    }
-
-    return returnFormatter.format(date)
-}
-
-fun String.timesNewsToDateTime() : String? {
-    val data = this.replace("T", " ").replace("Z", "")
-
-    var date: Date? = null
-    val formatter: DateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
-    val returnFormatter = SimpleDateFormat("dd MMM yyyy - hh:mm")
-
-    try {
-        date = formatter.parse(data)
-    } catch (e: ParseException) {
-        e.printStackTrace()
-    }
-
-    return returnFormatter.format(date)
-}
-
-fun getLocaleCurrentSqlDate() : String {
-    return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-}
-
-fun getLocaleCurrentTime() : String {
-    return SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
-}
-
-fun getLocaleCurrentDateTime() : String {
-    return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+fun getLocaleDateOrTime(format: String) : String {
+    return SimpleDateFormat(format, Locale.getDefault()).format(Date())
 }
 /* End Date Time */

@@ -15,7 +15,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class ApiModule {
-
     @Singleton
     @Provides
     fun provideRetrofitService(): ApiService = createService(ApiService::class.java)

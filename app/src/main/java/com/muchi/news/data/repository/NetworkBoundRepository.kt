@@ -4,9 +4,11 @@
 
 package com.muchi.news.data.repository
 
+import android.content.Context
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
 import com.muchi.news.extentions.State
+import com.muchi.news.extentions.isNetworkAvailable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import retrofit2.Response
@@ -20,25 +22,30 @@ import retrofit2.Response
 @ExperimentalCoroutinesApi
 abstract class NetworkBoundRepository<RESULT, REQUEST> {
 
-    fun asFlow() = flow<State<RESULT>> {
+    fun asFlow(context: Context) = flow<State<RESULT>> {
+
         emit(State.loading())
         emit(State.success(fetchFromLocal().first()))
 
-        val apiResponse = fetchFromRemote()
-        val remoteBody = apiResponse.body()
+        if(context.isNetworkAvailable()) {
+            val apiResponse = fetchFromRemote()
+            val remoteBody = apiResponse.body()
 
-        if (apiResponse.isSuccessful && remoteBody != null) {
-            deleteOldData()
-            saveRemoteData(remoteBody)
-        } else {
-            emit(State.error(apiResponse.message(), apiResponse.code()))
-        }
-
-        emitAll(
-            fetchFromLocal().map {
-                State.success(it)
+            if (apiResponse.isSuccessful && remoteBody != null) {
+                deleteOldData()
+                saveRemoteData(remoteBody)
+            } else {
+                emit(State.error(apiResponse.message(), apiResponse.code()))
             }
-        )
+
+            emitAll(
+                fetchFromLocal().map {
+                    State.success(it)
+                }
+            )
+        } else {
+            emit(State.error("", -1))
+        }
     }.catch { e ->
         emit(State.error(e.message.toString(), 69))
         e.printStackTrace()
@@ -63,23 +70,27 @@ abstract class NetworkRequestRepository<RESULT, REQUEST>  {
 
     var request: REQUEST? = null
 
-    fun asFlow() = flow<State<RESULT>> {
-        emit(State.loading())
+    fun asFlow(context: Context) = flow<State<RESULT>> {
+        if(context.isNetworkAvailable()) {
+            emit(State.loading())
 
-        val apiResponse = fetchFromRemote()
-        val remoteBody = apiResponse.body()
+            val apiResponse = fetchFromRemote()
+            val remoteBody = apiResponse.body()
 
-        if (apiResponse.isSuccessful && remoteBody != null) {
-            request = remoteBody
-        } else {
-            emit(State.error(apiResponse.message(), apiResponse.code()))
-        }
-
-        emitAll(
-            fetchFromData().map {
-                State.success(it)
+            if (apiResponse.isSuccessful && remoteBody != null) {
+                request = remoteBody
+            } else {
+                emit(State.error(apiResponse.message(), apiResponse.code()))
             }
-        )
+
+            emitAll(
+                fetchFromData().map {
+                    State.success(it)
+                }
+            )
+        } else {
+            emit(State.error("", -1))
+        }
     }.catch { e ->
         emit(State.error(e.message.toString(), 69))
         e.printStackTrace()

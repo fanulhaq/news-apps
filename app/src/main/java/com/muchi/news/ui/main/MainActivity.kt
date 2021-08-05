@@ -36,6 +36,7 @@ import com.muchi.news.ui.dialog.bottomSheetNoInternet
 import com.muchi.news.utils.NetworkUtils
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -55,9 +56,9 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
     lateinit var tvSearch: TextView
 
     private val mainVM: MainViewModel by viewModels()
+    @Inject lateinit var categoryAdapter: CategoryAdapter
+    @Inject lateinit var sourceAdapter: SourceAdapter
 
-    private var categoryAdapter: CategoryAdapter? = null
-    private var sourceAdapter: SourceAdapter = SourceAdapter()
     private var linearLayoutManager: LinearLayoutManager? = null
     private var beforePosition = 0
     private var category = "business"
@@ -82,12 +83,11 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
         changeHintSearch()
 
         linearLayoutManager = LinearLayoutManager(this, HORIZONTAL, false)
-        categoryAdapter = CategoryAdapter(this)
         categoryRV.apply {
             layoutManager = linearLayoutManager
             adapter = categoryAdapter
         }
-        categoryAdapter?.setClickListener(this)
+        categoryAdapter.setClickListener(this)
 
         itemRV.apply {
             layoutManager = LinearLayoutManager(context, VERTICAL, false)
@@ -98,7 +98,7 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
 
     private fun initViewModel(){
         mainVM.itemCategory.observe(this){
-            categoryAdapter?.setData(it)
+            categoryAdapter.setData(it)
         }
 
         mainVM.sources.observe(this) { state ->
@@ -122,7 +122,7 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
                 is State.Error -> {
                     progressBar.gone()
 
-                    if(state.code != 69)
+                    if(state.code != -1)
                         bottomSheetError(layoutInflater, handlerErrorResponse(state.code))
                 }
             }
@@ -139,7 +139,7 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
 
 
         if (mainVM.sources.value !is State.Success)
-            mainVM.sources(this, category)
+            mainVM.sources(category)
 
         handleNetworkChanges()
     }
@@ -149,15 +149,15 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
             beforePosition = position
             category = data.name.toLowerCase()
 
-            val selectedData = categoryAdapter?.getData()
-            selectedData?.forEach {
+            val selectedData = categoryAdapter.getData()
+            selectedData.forEach {
                 it.selected = data.name == it.name
             }
 
-            selectedData?.let { mainVM.itemCategory(it) }
+            selectedData.let { mainVM.itemCategory(it) }
             linearLayoutManager?.scrollToPositionWithOffset(position, 30)
 
-            mainVM.sources(this, category)
+            mainVM.sources(category)
         }
     }
 
@@ -202,7 +202,7 @@ class MainActivity : BaseActivity(), ItemClickCategory, ItemClickSource {
                 dialog.dismiss()
 
                 if(mainVM.sources.value is State.Error || sourceAdapter.itemCount == 0)
-                    mainVM.sources(this, category)
+                    mainVM.sources(category)
             }
         }
     }

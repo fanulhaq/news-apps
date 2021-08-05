@@ -25,9 +25,6 @@ import java.util.Set;
 import static com.squareup.moshi.internal.Util.generatedAdapter;
 
 public final class MyStandardJsonAdapters {
-
-    private MyStandardJsonAdapters() { }
-
     public static final JsonAdapter.Factory FACTORY = new JsonAdapter.Factory() {
         @Override public JsonAdapter<?> create(
                 @NotNull Type type, Set<? extends Annotation> annotations, @NotNull Moshi moshi) {

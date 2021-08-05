@@ -3,6 +3,7 @@
  */
 
 @file:SuppressLint("NonConstantResourceId")
+@file:Suppress("DEPRECATION")
 
 package com.muchi.news.ui.adapter
 
@@ -20,8 +21,12 @@ import com.muchi.news.R
 import com.muchi.news.R2
 import com.muchi.news.extentions.gone
 import com.muchi.news.extentions.visible
+import dagger.hilt.android.qualifiers.ActivityContext
+import javax.inject.Inject
 
-class CategoryAdapter(private val context: Context): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+class CategoryAdapter @Inject constructor(
+    @ActivityContext private val context: Context
+): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     private var data: List<CategoryModel> = ArrayList()
     private var unbinder: Unbinder? = null
@@ -33,7 +38,6 @@ class CategoryAdapter(private val context: Context): RecyclerView.Adapter<Catego
         return ViewHolder(itemView)
     }
 
-    @Suppress("DEPRECATION")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentData = data[position]
 

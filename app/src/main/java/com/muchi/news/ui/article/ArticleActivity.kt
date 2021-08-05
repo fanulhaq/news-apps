@@ -33,6 +33,7 @@ import com.muchi.news.ui.dialog.bottomSheetNoInternet
 import com.muchi.news.ui.webview.WebViewActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -50,8 +51,8 @@ class ArticleActivity : BaseActivity(), ItemClickArticle {
     lateinit var itemRV: RecyclerView
 
     private val articleVM: ArticleViewModel by viewModels()
+    @Inject lateinit var articleAdapter: ArticleAdapter
 
-    private var articleAdapter: ArticleAdapter = ArticleAdapter()
     private var source: String? = null
 
     override fun layoutRes(): Int {
@@ -76,11 +77,6 @@ class ArticleActivity : BaseActivity(), ItemClickArticle {
 
         initView()
         initViewModel()
-
-        // Buat jadwal untuk membersihkan cache glide
-//        Thread {
-//            Glide.get(this).clearDiskCache()
-//        }.start()
     }
 
     override fun onDestroy() {
@@ -126,16 +122,16 @@ class ArticleActivity : BaseActivity(), ItemClickArticle {
                 is State.Error -> {
                     progressBar.gone()
 
-                    if(state.code == -1)
-                        bottomSheetNoInternet(layoutInflater, 0)
-                    else
-                        bottomSheetError(layoutInflater, handlerErrorResponse(state.code))
+                    when(state.code) {
+                        -1 -> bottomSheetNoInternet(layoutInflater, 0)
+                        else -> bottomSheetError(layoutInflater, handlerErrorResponse(state.code))
+                    }
                 }
             }
         }
 
         if (articleVM.article.value !is State.Success)
-            source?.let { articleVM.article(this, it) }
+            source?.let { articleVM.article(it) }
     }
 
     @OnClick(value = [R2.id.imageBack])
