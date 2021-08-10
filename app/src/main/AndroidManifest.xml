@@ -17,16 +17,19 @@
         android:largeHeap="true"
         android:theme="@style/Theme.News"
         android:usesCleartextTraffic="true"
-        tools:ignore="UnusedAttribute">
+        tools:ignore="AllowBackup,UnusedAttribute">
         <activity
             android:screenOrientation="userPortrait"
-            android:name=".ui.webview.WebViewActivity"/>
+            android:name=".ui.webview.WebViewActivity"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.article.ArticleActivity"
-            android:screenOrientation="userPortrait" />
+            android:screenOrientation="userPortrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".ui.main.MainActivity"
-            android:screenOrientation="userPortrait">
+            android:screenOrientation="userPortrait"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

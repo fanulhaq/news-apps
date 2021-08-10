@@ -2,7 +2,7 @@
  * Copyright (c) 2021 - Muchi (Irfanul Haq).
  */
 
-@file:SuppressLint("NonConstantResourceId")
+@file:SuppressLint("NonConstantResourceId", "NotifyDataSetChanged")
 @file:Suppress("DEPRECATION", "DefaultLocale")
 
 package com.muchi.news.ui.adapter

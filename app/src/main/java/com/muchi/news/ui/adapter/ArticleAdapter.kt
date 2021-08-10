@@ -2,7 +2,7 @@
  * Copyright (c) 2021 - Muchi (Irfanul Haq).
  */
 
-@file:SuppressLint("NonConstantResourceId")
+@file:SuppressLint("NonConstantResourceId", "NotifyDataSetChanged", "DefaultLocale")
 @file:Suppress("DEPRECATION")
 
 package com.muchi.news.ui.adapter
@@ -41,8 +41,6 @@ class ArticleAdapter @Inject constructor(
         return ViewHolder(itemView)
     }
 
-    @SuppressLint("DefaultLocale")
-    @Suppress("DEPRECATION")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentData = data[position]
 
